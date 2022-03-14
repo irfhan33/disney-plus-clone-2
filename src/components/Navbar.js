@@ -1,13 +1,45 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { selectUserName } from "../features/user/userSlice";
+import {
+  selectUserName,
+  setUserLogin,
+  setUserLogout,
+} from "../features/user/userSlice";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { auth, provider } from "../firebaseConfig";
+import { signOut } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 function Navbar() {
   const user = useSelector(selectUserName);
+  const dispatch = useDispatch();
 
-  console.log(user);
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch(setUserLogout());
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const login = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        dispatch(
+          setUserLogin({
+            name: result.user.displayName,
+            email: result.user.email,
+            photo: result.user.photoURL,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
   return (
     <Nav>
       <Link to="/">
@@ -54,10 +86,11 @@ function Navbar() {
               src="https://w0.peakpx.com/wallpaper/120/520/HD-wallpaper-jay-jo-flash-graphy-manhwa-wind-breaker.jpg"
               alt=""
             />
+            <LogoutButton onClick={logout}>Logout</LogoutButton>
           </UserImage>
         </>
       ) : (
-        <LoginButton>Login</LoginButton>
+        <LoginButton onClick={login}>Login</LoginButton>
       )}
     </Nav>
   );
@@ -65,6 +98,28 @@ function Navbar() {
 
 export default Navbar;
 
+const LogoutButton = styled.div`
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 100px;
+  opacity: 1;
+  position: absolute;
+  left: -24px;
+  top: 120%;
+  text-align: center;
+  opacity: 0;
+  transition: all 250ms;
+
+  &:hover {
+    background: rgba(259, 259, 259, 0.8);
+    color: black;
+  }
+`;
 const Nav = styled.nav`
   background-color: black;
   position: sticky;
@@ -142,11 +197,19 @@ const UserImage = styled.div`
   width: 50px;
   height: 50px;
   margin-left: auto;
+  position: relative;
+  cursor: pointer;
   img {
     height: 100%;
     width: 100%;
     border-radius: 50%;
     object-fit: cover;
+  }
+
+  &:hover {
+    ${LogoutButton} {
+      opacity: 1;
+    }
   }
 `;
 

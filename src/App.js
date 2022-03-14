@@ -3,7 +3,11 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUserName, setUserLogin } from "./features/user/userSlice";
+import {
+  selectUserName,
+  setUserLogin,
+  setUserLogout,
+} from "./features/user/userSlice";
 import Detail from "./components/Detail";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
@@ -11,7 +15,6 @@ import { auth } from "./firebaseConfig";
 
 function App() {
   const user = useSelector(selectUserName);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,6 +27,8 @@ function App() {
             photo: user.photoURL,
           })
         );
+      } else {
+        dispatch(setUserLogout());
       }
     });
   }, []);

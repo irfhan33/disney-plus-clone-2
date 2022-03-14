@@ -50,8 +50,9 @@ const Container = styled.section`
   display: flex;
   align-items: center;
   position: relative;
-  min-height: calc(100vh - 70px);
+  height: 100vh;
   justify-content: center;
+  overflow: hidden;
 
   &:before {
     content: "";
@@ -59,12 +60,13 @@ const Container = styled.section`
     top: 0;
     right: 0;
     left: 0;
-    bottom: 0;
     background-image: url("/images/login-background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     z-index: -1;
     background-attachment: fixed;
+    height: 100%;
+    background-position: top;
   }
 `;
 

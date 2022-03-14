@@ -18,27 +18,30 @@ function Detail() {
       });
   }, []);
 
-  console.log(movie);
   return (
     <Container>
-      <BackgroundImg src={movie.backgroundImg} />
-      <TitleImg src={movie.titleImg} />
-      <Controls>
-        <PlayButton>
-          <img src="/images/play-icon-black.png" alt="" />
-          <span>Play</span>
-        </PlayButton>
-        <TrailerButton>
-          <img src="/images/play-icon-white.png" alt="" />
-          <span>Play</span>
-        </TrailerButton>
-        <AddButton>+</AddButton>
-        <WatchButton>
-          <img src="/images/group-icon.png" alt="" />
-        </WatchButton>
-      </Controls>
-      <SubTitle>{movie.subTitle}</SubTitle>
-      <Description>{movie.description}</Description>
+      {movie && (
+        <>
+          <BackgroundImg src={movie.backgroundImg} />
+          <TitleImg src={movie.titleImg} />
+          <Controls>
+            <PlayButton>
+              <img src="/images/play-icon-black.png" alt="" />
+              <span>Play</span>
+            </PlayButton>
+            <TrailerButton>
+              <img src="/images/play-icon-white.png" alt="" />
+              <span>Play</span>
+            </TrailerButton>
+            <AddButton>+</AddButton>
+            <WatchButton>
+              <img src="/images/group-icon.png" alt="" />
+            </WatchButton>
+          </Controls>
+          <SubTitle>{movie.subTitle}</SubTitle>
+          <Description>{movie.description}</Description>
+        </>
+      )}
     </Container>
   );
 }
@@ -78,6 +81,10 @@ const Controls = styled.div`
   display: flex;
   gap: 25px;
   align-items: center;
+
+  @media (max-width: 768px) {
+    gap: 10px;
+  }
 `;
 const PlayButton = styled.div`
   display: flex;
@@ -96,6 +103,17 @@ const PlayButton = styled.div`
 
   &:hover {
     background: rgb(198, 198, 198);
+  }
+
+  @media (max-width: 768px) {
+    height: 45px;
+    padding: 0px 12px;
+    font-size: 12px;
+    margin: 0px 10px 0px 0px;
+
+    img {
+      width: 25px;
+    }
   }
 `;
 const TrailerButton = styled(PlayButton)`
@@ -118,7 +136,6 @@ const AddButton = styled.div`
   border-radius: 50%;
   border: 2px solid white;
   cursor: pointer;
-
   transition: all 250ms;
 
   &:hover {
